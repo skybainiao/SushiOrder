@@ -1,4 +1,10 @@
 package Client.Networking;
 
-public interface Client {
+import Server.PCS;
+
+import java.rmi.Remote;
+
+public interface Client  extends Remote, PCS {
+
+
 }
