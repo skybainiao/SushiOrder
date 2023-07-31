@@ -10,6 +10,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ClientImpl implements Client{
 
@@ -19,7 +20,7 @@ public class ClientImpl implements Client{
     private PropertyChangeSupport support;
 
 
-    public ClientImpl(String name) throws RemoteException, NotBoundException, SQLException {
+    public ClientImpl(String name) throws Exception {
         this.name=name;
         support=new PropertyChangeSupport(this);
         UnicastRemoteObject.exportObject(this, 0);
@@ -27,6 +28,8 @@ public class ClientImpl implements Client{
         server = (Server) registry.lookup("Server");
         user=new User("","");
         test();
+        addUser(new User("asd","ewq"));
+        System.out.println(getUsers());
     }
 
     public void test() throws SQLException, RemoteException {
@@ -34,4 +37,23 @@ public class ClientImpl implements Client{
     }
 
 
+    @Override
+    public void addUser(User user) throws RemoteException {
+        server.addUser(user);
+    }
+
+    @Override
+    public ArrayList<User> getUsers() throws Exception {
+        return server.getUsers();
+    }
+
+    @Override
+    public void setClientName(String name) throws RemoteException {
+        this.name = name;
+    }
+
+    @Override
+    public String getClientName() throws RemoteException {
+        return name;
+    }
 }

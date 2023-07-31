@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Client.View.HomepageController"
+      prefHeight="400.0" prefWidth="600.0" spacing="20">
+
+    <ListView fx:id="categoryList" prefHeight="400" prefWidth="150"/>
+
+    <GridPane fx:id="foodGrid" hgap="10" vgap="10"/>
+
+    <VBox>
+        <ListView fx:id="orderList" prefHeight="350" prefWidth="200"/>
+        <Button text="Submit Order" fx:id="btnSubmitOrder" onAction="#submitOrder"/>
+    </VBox>
+
+</HBox>
