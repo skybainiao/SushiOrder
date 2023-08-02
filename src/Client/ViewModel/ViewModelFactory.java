@@ -12,7 +12,7 @@ public class ViewModelFactory {
     public ViewModelFactory(ModelFactory modelFactory) throws RemoteException, NotBoundException {
 
         loginVM=new LoginVM(modelFactory.getLoginModel());
-
+        homepageVM=new HomeVM(modelFactory.getCustomerModel());
     }
 
     public HomeVM getOverViewVM() {

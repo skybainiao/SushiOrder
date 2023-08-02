@@ -1,7 +1,7 @@
 package Client.Model.Login;
 
 import Client.Networking.Client;
-import Server.Model.User;
+import Server.Shared.User;
 
 
 import java.rmi.NotBoundException;

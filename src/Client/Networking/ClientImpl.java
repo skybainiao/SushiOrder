@@ -1,10 +1,10 @@
 package Client.Networking;
 
-import Server.Model.User;
+import Server.Shared.Order;
+import Server.Shared.User;
 import Server.Server;
 
 import java.beans.PropertyChangeSupport;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -55,5 +55,10 @@ public class ClientImpl implements Client{
     @Override
     public String getClientName() throws RemoteException {
         return name;
+    }
+
+    @Override
+    public void addOrder(Order order) throws RemoteException {
+        server.addOrder(order);
     }
 }

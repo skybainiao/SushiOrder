@@ -1,8 +1,10 @@
 package Server.Database;
 
-import Server.Model.User;
+import Server.Shared.Order;
+import Server.Shared.User;
 
 import java.sql.*;
+import java.util.Map;
 
 public class JDBC {
     private static String driver = "org.postgresql.Driver";
@@ -19,7 +21,7 @@ public class JDBC {
     }
 
     public int addUser(User user) throws SQLException {
-        String sql="insert into appusers.userdetail(username,password)\n" + "values(?,?);";
+        String sql="insert into sushi.userdetail(username,password)\n" + "values(?,?);";
         PreparedStatement preparedStatement=connection.prepareStatement(sql);
         preparedStatement.setString(1, user.getUsername());
         preparedStatement.setString(2, user.getPassword());
@@ -29,11 +31,35 @@ public class JDBC {
 
 
     public ResultSet getAllUsers() throws SQLException {
-        String sql="select username,password from appusers.userdetail";
+        String sql="select username,password from sushi.userdetail";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
         return preparedStatement.executeQuery();
     }
+
+    public int addOrder(Order order) throws SQLException {
+        String sql = "INSERT INTO sushi.orders (order_time, food_name, total_price) VALUES (CURRENT_TIMESTAMP, ?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+        // Convert the food map into a string
+        StringBuilder orderStringBuilder = new StringBuilder();
+        for (Map.Entry<String, Integer> entry : order.getFood().entrySet()) {
+            orderStringBuilder.append(entry.getKey());
+            orderStringBuilder.append(" x");
+            orderStringBuilder.append(entry.getValue());
+            orderStringBuilder.append(", ");
+        }
+        // Remove the last comma and space
+        orderStringBuilder.setLength(orderStringBuilder.length() - 2);
+
+        preparedStatement.setString(1, orderStringBuilder.toString());
+        preparedStatement.setInt(2, order.getTotalPrice());
+
+        return preparedStatement.executeUpdate();
+    }
+
+
+
 
 
 

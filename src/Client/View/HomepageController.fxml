@@ -3,18 +3,29 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="Client.View.HomepageController"
-      prefHeight="400.0" prefWidth="600.0" spacing="20">
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Client.View.HomepageController"
+            prefHeight="400.0" prefWidth="600.0">
 
-    <ListView fx:id="categoryList" prefHeight="400" prefWidth="150"/>
+    <HBox AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" spacing="20">
 
-    <GridPane fx:id="foodGrid" hgap="10" vgap="10"/>
+        <AnchorPane>
+            <ListView fx:id="categoryList" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="50"/>
+        </AnchorPane>
 
-    <VBox>
-        <ListView fx:id="orderList" prefHeight="350" prefWidth="200"/>
-        <Button text="Submit Order" fx:id="btnSubmitOrder" onAction="#submitOrder"/>
-    </VBox>
+        <GridPane fx:id="foodGrid" hgap="10" vgap="10" HBox.hgrow="ALWAYS"/>
 
-</HBox>
+        <Region HBox.hgrow="ALWAYS"/>
+
+
+        <AnchorPane>
+            <ListView fx:id="orderList" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="70"/>
+            <Label fx:id="totalPrice" AnchorPane.bottomAnchor="40" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"/>
+            <Button text="Submit Order" fx:id="btnSubmitOrder" onAction="#submitOrder" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"/>
+        </AnchorPane>
+
+
+    </HBox>
+
+</AnchorPane>

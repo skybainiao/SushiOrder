@@ -1,5 +1,7 @@
 package Client.Model;
 
+import Client.Model.Customer.CustomerImpl;
+import Client.Model.Customer.CustomerModel;
 import Client.Model.Login.AvailableState;
 import Client.Model.Login.LoginState;
 import Client.Networking.Client;
@@ -10,6 +12,8 @@ import java.rmi.RemoteException;
 public class ModelFactory {
 
     private LoginState loginState;
+
+    private CustomerModel customerModel;
     private Client client;
 
     public ModelFactory(Client client){
@@ -21,5 +25,12 @@ public class ModelFactory {
             loginState =new AvailableState(client);
         }
         return loginState;
+    }
+
+    public CustomerModel getCustomerModel() throws RemoteException, NotBoundException {
+        if (customerModel==null){
+            customerModel=new CustomerImpl(client);
+        }
+        return customerModel;
     }
 }

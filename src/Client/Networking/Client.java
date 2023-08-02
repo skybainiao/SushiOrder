@@ -1,6 +1,7 @@
 package Client.Networking;
 
-import Server.Model.User;
+import Server.Shared.Order;
+import Server.Shared.User;
 import Server.PCS;
 
 import java.rmi.Remote;
@@ -12,5 +13,6 @@ public interface Client  extends Remote, PCS {
     ArrayList<User> getUsers() throws Exception;
     void setClientName(String name) throws RemoteException;
     String getClientName() throws RemoteException;
+    void addOrder(Order order) throws RemoteException;
 
 }

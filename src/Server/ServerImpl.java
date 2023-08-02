@@ -2,8 +2,9 @@ package Server;
 
 import Client.Networking.Client;
 import Server.Database.JDBC;
-import Server.Model.Movie;
-import Server.Model.User;
+
+import Server.Shared.Order;
+import Server.Shared.User;
 
 import java.beans.PropertyChangeSupport;
 import java.rmi.RemoteException;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 
 public class ServerImpl implements Server{
 
-    private Movie movie;
+
     private JDBC jdbc;
     private ArrayList<Client> clients;
     private PropertyChangeSupport support;
@@ -31,7 +32,7 @@ public class ServerImpl implements Server{
         clients=new ArrayList<>();
         support=new PropertyChangeSupport(this);
         this.jdbc=new JDBC();
-        movie=new Movie("",0,"","","","","",0,0);
+
 
         //addUser(new User("chen","123321"));
         System.out.println(getUsers().toString());
@@ -68,6 +69,15 @@ public class ServerImpl implements Server{
         }
 
         return userList;
+    }
+
+    @Override
+    public void addOrder(Order order) throws RemoteException {
+        try {
+            jdbc.addOrder(order);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
