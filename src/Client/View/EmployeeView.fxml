@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.View.EmployeeView">
+    <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Button onAction="#showNewOrders" prefHeight="25.0" prefWidth="105.0" text="NewOrder" />
+        <Button onAction="#showCompletedOrders" text="CompletedOrder" />
+    </VBox>
+    <TableView fx:id="orderTable" layoutX="105.0" prefHeight="400.0" prefWidth="495.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columns>
+            <TableColumn fx:id="orderIdColumn" prefWidth="96.0" text="OrderId" />
+            <TableColumn fx:id="foodNameColumn" prefWidth="206.0" text="FoodName" />
+            <TableColumn fx:id="orderStatusColumn" prefWidth="104.0" text="OrderStatus" />
+            <TableColumn fx:id="orderActionColumn" prefWidth="88.0" text="Operate" />
+        </columns>
+    </TableView>
+</AnchorPane>

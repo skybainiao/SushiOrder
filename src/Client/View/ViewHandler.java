@@ -17,6 +17,9 @@ public class ViewHandler {
     public ViewHandler(ViewModelFactory viewModelFactory)  {
         this.viewModelFactory=viewModelFactory;
         this.mainStage=new Stage();
+        mainStage.setWidth(900);
+        mainStage.setHeight(700);
+
     }
 
 

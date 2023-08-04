@@ -4,13 +4,17 @@ import Server.Shared.Order;
 import Server.Shared.User;
 import Server.Server;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ClientImpl implements Client{
 
@@ -22,14 +26,14 @@ public class ClientImpl implements Client{
 
     public ClientImpl(String name) throws Exception {
         this.name=name;
-        support=new PropertyChangeSupport(this);
         UnicastRemoteObject.exportObject(this, 0);
         Registry registry = LocateRegistry.getRegistry("localhost", 6666);
         server = (Server) registry.lookup("Server");
-        user=new User("","");
-        test();
-        addUser(new User("asd","ewq"));
+        support=new PropertyChangeSupport(this);
         System.out.println(getUsers());
+        server.addClientCallBack(this);
+        server.addClient(this);
+
     }
 
     public void test() throws SQLException, RemoteException {
@@ -61,4 +65,27 @@ public class ClientImpl implements Client{
     public void addOrder(Order order) throws RemoteException {
         server.addOrder(order);
     }
+
+    @Override
+    public List<Client> getClients() throws RemoteException {
+        return server.getClients();
+    }
+
+    @Override
+    public void update(Order order) throws RemoteException {
+        support.firePropertyChange("order",null,order);
+    }
+
+
+    @Override
+    public void addPCL(String name, PropertyChangeListener listener) throws RemoteException {
+        support.addPropertyChangeListener(name, listener);
+    }
+
+    @Override
+    public void removePCL(String name, PropertyChangeListener listener) throws RemoteException {
+        support.removePropertyChangeListener(name, listener);
+    }
+
+
 }

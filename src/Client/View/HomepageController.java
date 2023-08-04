@@ -2,6 +2,7 @@ package Client.View;
 
 import Client.ViewModel.HomeVM;
 import Server.Shared.Order;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,12 +10,14 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HomepageController {
+public class HomepageController{
 
     @FXML
     private ListView<String> categoryList;
@@ -34,42 +37,46 @@ public class HomepageController {
     private HomeVM homepageVM;
     private ViewHandler viewHandler;
 
+    private Order order;
+
+
+
     private final Map<String, Map<String, Integer>> categoryToFoodMap = new HashMap<>() {{
         put("Sushi", new HashMap<>() {{
-            put("Salmon Sushi", 10);
-            put("Tuna Sushi", 15);
-            put("Eel Sushi", 20);
-            put("Shrimp Sushi", 15);
-            put("Octopus Sushi", 12);
-            put("Crab Sushi", 16);
-            put("Scallop Sushi", 18);
-            put("Squid Sushi", 14);
-            put("Mackerel Sushi", 12);
-            put("Sea Urchin Sushi", 20);
+            put("Salmon Sushi", 80);
+            put("Tuna Sushi", 120);
+            put("Eel Sushi", 100);
+            put("Shrimp Sushi", 80);
+            put("Octopus Sushi", 120);
+            put("Crab Sushi", 160);
+            put("Scallop Sushi", 120);
+            put("Squid Sushi", 90);
+            put("Mackerel Sushi", 120);
+            put("Sea Urchin Sushi", 100);
         }});
         put("Drinks", new HashMap<>() {{
-            put("Green Tea", 3);
-            put("Black Tea", 3);
-            put("Oolong Tea", 4);
-            put("Sake", 7);
-            put("Plum Wine", 8);
-            put("Beer", 5);
-            put("Soda", 2);
-            put("Water", 1);
-            put("Lemonade", 2);
-            put("Coffee", 3);
+            put("Green Tea", 30);
+            put("Black Tea", 30);
+            put("Oolong Tea", 40);
+            put("Sake", 70);
+            put("Plum Wine", 80);
+            put("Beer", 50);
+            put("Soda", 20);
+            put("Water", 10);
+            put("Lemonade", 20);
+            put("Coffee", 30);
         }});
         put("Fried Skewers", new HashMap<>() {{
-            put("Chicken Skewer", 5);
-            put("Beef Skewer", 7);
-            put("Pork Skewer", 6);
-            put("Shrimp Skewer", 8);
-            put("Salmon Skewer", 7);
-            put("Vegetable Skewer", 4);
-            put("Mushroom Skewer", 4);
-            put("Cheese Skewer", 6);
-            put("Sausage Skewer", 5);
-            put("Eggplant Skewer", 4);
+            put("Chicken Skewer", 50);
+            put("Beef Skewer", 70);
+            put("Pork Skewer", 60);
+            put("Shrimp Skewer", 80);
+            put("Salmon Skewer", 70);
+            put("Vegetable Skewer", 40);
+            put("Mushroom Skewer", 40);
+            put("Cheese Skewer", 60);
+            put("Sausage Skewer", 50);
+            put("Eggplant Skewer", 40);
         }});
     }};
 
@@ -82,6 +89,11 @@ public class HomepageController {
 
         categoryList.getItems().addAll(categoryToFoodMap.keySet());
         categoryList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateFoodGrid(newValue));
+        order=new Order(orderMap,totalCost);
+
+        homepageVM.addPCL("order",evt -> { propertyChange(evt);}); ;
+
+
     }
 
     private void updateFoodGrid(String category) {
@@ -90,7 +102,7 @@ public class HomepageController {
         int vboxIndex = 0;
         for (String food : foods.keySet()) {
             VBox vbox = new VBox(10);
-            Label label = new Label(food + " - $" + foods.get(food));
+            Label label = new Label(food + " - kr" + foods.get(food));
             Button button = new Button("+");
             button.setOnAction(event -> addFoodToOrder(food, foods.get(food)));
             vbox.getChildren().addAll(label, button);
@@ -110,16 +122,22 @@ public class HomepageController {
         for (Map.Entry<String, Integer> entry : orderMap.entrySet()) {
             orderList.getItems().add(entry.getKey() + " x" + entry.getValue());
         }
-        totalPrice.setText("Total price: $" + totalCost);
+        totalPrice.setText("Total price: kr" + totalCost);
     }
 
     @FXML
     private void submitOrder() throws SQLException, RemoteException {
-        Order order = new Order(new HashMap<>(orderMap), totalCost);
         homepageVM.addOrder(order);
         System.out.println(order);
         System.out.println("Order submitted");
     }
 
+
+    public void propertyChange(PropertyChangeEvent evt) {
+        Platform.runLater(() -> {
+            System.out.println("success");
+
+        });
+    }
 
 }

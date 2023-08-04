@@ -8,6 +8,7 @@
             fx:controller="Client.View.HomepageController"
             prefHeight="400.0" prefWidth="600.0">
 
+
     <HBox AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" spacing="20">
 
         <AnchorPane>

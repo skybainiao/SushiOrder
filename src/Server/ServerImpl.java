@@ -6,6 +6,8 @@ import Server.Database.JDBC;
 import Server.Shared.Order;
 import Server.Shared.User;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -14,13 +16,18 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ServerImpl implements Server{
+    private PropertyChangeSupport support=new PropertyChangeSupport(this);
 
 
     private JDBC jdbc;
-    private ArrayList<Client> clients;
-    private PropertyChangeSupport support;
+    private List<Client> clients;
+    private Map<Client, PropertyChangeListener> listeners = new HashMap<>();
+
 
     public ServerImpl() throws Exception {
         Registry registry= LocateRegistry.createRegistry(6666);
@@ -28,9 +35,8 @@ public class ServerImpl implements Server{
         UnicastRemoteObject.exportObject(this,6666);
 
         System.out.println("Server Start");
-        test();
+
         clients=new ArrayList<>();
-        support=new PropertyChangeSupport(this);
         this.jdbc=new JDBC();
 
 
@@ -46,7 +52,7 @@ public class ServerImpl implements Server{
     public void addUser(User user) throws RemoteException {
         try {
             jdbc.addUser(user);
-            support.firePropertyChange("user",user,user.getUsername());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,10 +81,52 @@ public class ServerImpl implements Server{
     public void addOrder(Order order) throws RemoteException {
         try {
             jdbc.addOrder(order);
+            support.firePropertyChange("order",null,order);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    public void addClient(Client client) throws RemoteException {
+        clients.add(client);
 
+    }
+
+    @Override
+    public void addClientCallBack(Client client) throws RemoteException {
+        PropertyChangeListener listener = new PropertyChangeListener() {
+            @Override public void propertyChange(PropertyChangeEvent evt) {
+                try{
+                    System.out.println("server1");
+                    Order order = (Order) evt.getNewValue();
+                    client.update(order);
+                }
+                catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        System.out.println("server2");
+        listeners.put(client, listener);
+        addPCL("order", listener);
+
+    }
+
+    @Override
+    public List<Client> getClients() throws RemoteException {
+        return clients;
+    }
+
+
+    @Override
+    public void addPCL(String name, PropertyChangeListener listener) throws RemoteException {
+        support.addPropertyChangeListener(name,listener);
+    }
+
+    @Override
+    public void removePCL(String name, PropertyChangeListener listener) throws RemoteException {
+        support.removePropertyChangeListener(name,listener);
+    }
 }
