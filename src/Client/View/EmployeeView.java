@@ -56,13 +56,13 @@ public class EmployeeView {
     }
 
     private void populateOrderTable() {
-        // set up the columns in the table
+
         orderIdColumn.setCellValueFactory(new PropertyValueFactory<Order, String>("orderId"));
         foodNameColumn.setCellValueFactory(new PropertyValueFactory<Order, String>("foodName"));
         orderStatusColumn.setCellValueFactory(new PropertyValueFactory<Order, String>("orderStatus"));
 
         try {
-            // add your data to the table here.
+
             ObservableList<Order> orders = FXCollections.observableArrayList(employeeVM.getOrders());
             orderTable.setItems(orders);
         } catch (Exception e) {
@@ -79,7 +79,7 @@ public class EmployeeView {
                     {
                         completeButton.setOnAction(event -> {
                             Order order = getTableView().getItems().get(getIndex());
-                            // Your code to complete the order
+
                             try {
                                 completeOrder(order);
                             } catch (Exception e) {

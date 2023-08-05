@@ -163,7 +163,7 @@ public class HomepageController{
             try {
                 viewHandler.openEmployeeView();
             } catch (Exception e) {
-                // handle exception here
+                System.out.println(e);
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
