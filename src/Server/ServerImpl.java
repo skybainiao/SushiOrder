@@ -114,6 +114,37 @@ public class ServerImpl implements Server{
 
     }
 
+    public ArrayList<Order> getOrders() throws Exception {
+        ResultSet rs = jdbc.getAllOrdersResultSet();
+        ArrayList<Order> orderList = new ArrayList<>();
+        try {
+            while(rs.next()) {
+                Map<String, Integer> food = convertStringToMap(rs.getString("food_name"));
+                orderList.add(new Order(rs.getInt("order_id"), food, rs.getInt("total_price"), rs.getString("order_status")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orderList;
+    }
+
+    @Override
+    public int updateOrderStatus(int orderId, String newStatus) throws RemoteException {
+        return jdbc.updateOrderStatus(orderId,newStatus);
+    }
+
+    public Map<String, Integer> convertStringToMap(String foodString) {
+        Map<String, Integer> foodMap = new HashMap<>();
+        String[] foods = foodString.split(", ");
+
+        for(String food : foods) {
+            String[] foodDetail = food.split(" \\*");
+            foodMap.put(foodDetail[0], Integer.parseInt(foodDetail[1]));
+        }
+        return foodMap;
+    }
+
+
     @Override
     public List<Client> getClients() throws RemoteException {
         return clients;

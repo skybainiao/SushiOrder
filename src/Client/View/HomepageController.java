@@ -4,9 +4,7 @@ import Client.ViewModel.HomeVM;
 import Server.Shared.Order;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
@@ -16,6 +14,7 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class HomepageController{
 
@@ -33,6 +32,8 @@ public class HomepageController{
 
     @FXML
     private Label totalPrice;
+    @FXML
+    private Button adminButton;
 
     private HomeVM homepageVM;
     private ViewHandler viewHandler;
@@ -89,7 +90,7 @@ public class HomepageController{
 
         categoryList.getItems().addAll(categoryToFoodMap.keySet());
         categoryList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateFoodGrid(newValue));
-        order=new Order(orderMap,totalCost);
+        order=new Order(0,orderMap,totalCost,"processing");
 
         homepageVM.addPCL("order",evt -> { propertyChange(evt);}); ;
 
@@ -120,17 +121,27 @@ public class HomepageController{
     private void updateOrderList() {
         orderList.getItems().clear();
         for (Map.Entry<String, Integer> entry : orderMap.entrySet()) {
-            orderList.getItems().add(entry.getKey() + " x" + entry.getValue());
+            orderList.getItems().add(entry.getKey() + " *" + entry.getValue());
         }
         totalPrice.setText("Total price: kr" + totalCost);
     }
 
     @FXML
     private void submitOrder() throws SQLException, RemoteException {
-        homepageVM.addOrder(order);
-        System.out.println(order);
+        Order newOrder = new Order(orderMap, totalCost, "processing");
+        homepageVM.addOrder(newOrder);
+        System.out.println(newOrder);
         System.out.println("Order submitted");
+        // clear order data and order list
+        orderMap.clear();
+        totalCost = 0;
+        orderList.getItems().clear();
+        totalPrice.setText("Total price: kr" + totalCost);
     }
+
+
+
+
 
 
     public void propertyChange(PropertyChangeEvent evt) {
@@ -138,6 +149,29 @@ public class HomepageController{
             System.out.println("success");
 
         });
+    }
+
+    @FXML
+    private void openAdminPage() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Admin Page Login");
+        dialog.setHeaderText("Enter the admin password:");
+        dialog.setContentText("Password:");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent() && result.get().equals("1234")) {
+            try {
+                viewHandler.openEmployeeView();
+            } catch (Exception e) {
+                // handle exception here
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Incorrect password. Please try again.");
+            alert.showAndWait();
+        }
     }
 
 }

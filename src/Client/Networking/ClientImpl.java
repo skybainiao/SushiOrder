@@ -15,6 +15,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ClientImpl implements Client{
 
@@ -74,6 +75,16 @@ public class ClientImpl implements Client{
     @Override
     public void update(Order order) throws RemoteException {
         support.firePropertyChange("order",null,order);
+    }
+
+    @Override
+    public ArrayList<Order> getOrders() throws Exception {
+        return server.getOrders();
+    }
+
+    @Override
+    public int updateOrderStatus(int orderId, String newStatus) throws SQLException, RemoteException {
+        return server.updateOrderStatus(orderId,newStatus);
     }
 
 

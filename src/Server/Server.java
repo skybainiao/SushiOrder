@@ -9,6 +9,7 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public interface Server extends Remote,PCS {
     String test() throws RemoteException, SQLException;
@@ -22,4 +23,7 @@ public interface Server extends Remote,PCS {
     void addClientCallBack(Client client) throws RemoteException;
     List<Client> getClients() throws RemoteException;
 
+    ArrayList<Order> getOrders() throws Exception;
+
+    int updateOrderStatus(int orderId, String newStatus) throws SQLException, RemoteException;
 }

@@ -7,36 +7,68 @@ import java.util.Map;
 public class Order implements Serializable {
 
 
-    private Map<String, Integer> food;
+    private int orderId;
+    private Map<String, Integer> foodName;
 
     private int totalPrice;
 
-    public Order(Map<String, Integer> food, int totalPrice) {
-        this.food = food;
+    private String orderStatus;
+
+
+    public Order( Map<String, Integer> foodName, int totalPrice,String orderStatus) {
+
+        this.foodName = foodName;
         this.totalPrice = totalPrice;
+        this.orderStatus=orderStatus;
+    }
+    public Order(int orderId, Map<String, Integer> foodName, int totalPrice,String orderStatus) {
+        this.orderId=orderId;
+        this.foodName = foodName;
+        this.totalPrice = totalPrice;
+        this.orderStatus=orderStatus;
+    }
+
+
+
+    public int getOrderId() {
+        return orderId;
     }
 
     public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
     }
 
-    public void setFood(Map<String, Integer> food) {
-        this.food = food;
+    public void setFoodName(Map<String, Integer> foodName) {
+        this.foodName = foodName;
     }
 
     public int getTotalPrice() {
         return totalPrice;
     }
 
-    public Map<String, Integer> getFood() {
-        return food;
+    public Map<String, Integer> getFoodName() {
+        return foodName;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
     @Override
     public String toString() {
         return "Order{" +
-                "food=" + food +
+                "orderId=" + orderId +
+                ", foodName=" + foodName +
                 ", totalPrice=" + totalPrice +
+                ", orderStatus='" + orderStatus + '\'' +
                 '}';
     }
 }

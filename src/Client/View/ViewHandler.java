@@ -41,6 +41,26 @@ public class ViewHandler {
         mainStage.show();
     }
 
+    private Scene employeeScene;
+    public void openEmployeeView(){
+        try {
+            FXMLLoader loader=new FXMLLoader();
+            loader.setLocation(getClass().getResource("EmployeeView.fxml"));
+            Parent root=loader.load();
+            EmployeeView employeeView =loader.getController();
+            employeeView.initialize(viewModelFactory.getEmployeeVM(),this);
+            mainStage.setTitle("OverView");
+            overViewScene=new Scene(root);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        mainStage.setScene(overViewScene);
+        mainStage.show();
+    }
+
     private Scene loginScene;
     public void openLoginView(){
         try {

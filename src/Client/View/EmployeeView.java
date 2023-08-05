@@ -1,12 +1,22 @@
 package Client.View;
 
+import Client.ViewModel.EmployeeVM;
+import Client.ViewModel.HomeVM;
 import Server.Shared.Order;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
+
+import java.beans.PropertyChangeEvent;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class EmployeeView {
     @FXML
@@ -19,18 +29,46 @@ public class EmployeeView {
     private TableColumn<Order, String> orderStatusColumn;
     @FXML
     private TableColumn<Order, Void> orderActionColumn;
+    private EmployeeVM employeeVM;
+    private ViewHandler viewHandler;
 
     @FXML
-    public void initialize() {
-        // Set up the columns to display the right property of Order
-        //orderIdColumn.setCellValueFactory(cellData -> cellData.getValue().orderIdProperty());
-        //foodNameColumn.setCellValueFactory(cellData -> cellData.getValue().foodNameProperty());
-        //orderStatusColumn.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
-
-        // Add the 'Complete' button to the action column
+    public void initialize(EmployeeVM employeeVM, ViewHandler viewHandler) throws Exception {
+        this.employeeVM = employeeVM;
+        this.viewHandler=viewHandler;
         orderActionColumn.setCellFactory(getButtonCellFactory());
+        populateOrderTable();
+        showNewOrders();
+
+        employeeVM.addPCL("order",evt -> { propertyChange(evt);}); ;
+
     }
 
+    public void propertyChange(PropertyChangeEvent evt) {
+        Platform.runLater(() -> {
+            try {
+                showNewOrders();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        });
+    }
+
+    private void populateOrderTable() {
+        // set up the columns in the table
+        orderIdColumn.setCellValueFactory(new PropertyValueFactory<Order, String>("orderId"));
+        foodNameColumn.setCellValueFactory(new PropertyValueFactory<Order, String>("foodName"));
+        orderStatusColumn.setCellValueFactory(new PropertyValueFactory<Order, String>("orderStatus"));
+
+        try {
+            // add your data to the table here.
+            ObservableList<Order> orders = FXCollections.observableArrayList(employeeVM.getOrders());
+            orderTable.setItems(orders);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     private Callback<TableColumn<Order, Void>, TableCell<Order, Void>> getButtonCellFactory() {
         return new Callback<>() {
             @Override
@@ -42,7 +80,11 @@ public class EmployeeView {
                         completeButton.setOnAction(event -> {
                             Order order = getTableView().getItems().get(getIndex());
                             // Your code to complete the order
-                            completeOrder(order);
+                            try {
+                                completeOrder(order);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
                         });
                     }
 
@@ -60,17 +102,35 @@ public class EmployeeView {
         };
     }
 
-    private void completeOrder(Order order) {
-        // Your code here to mark the order as completed
+    private void completeOrder(Order order) throws Exception {
+        order.setOrderStatus("completed");
+        employeeVM.updateOrderStatus(order.getOrderId(), "completed");
+
+        showNewOrders();
     }
 
     @FXML
-    public void showNewOrders() {
-        // Your code here to fetch and display new orders
+    public void showNewOrders() throws Exception {
+        updateOrderTable(employeeVM.getOrders().stream()
+                .filter(order -> order.getOrderStatus().equals("processing"))
+                .collect(Collectors.toList()));
     }
 
     @FXML
-    public void showCompletedOrders() {
-        // Your code here to fetch and display completed orders
+    public void showCompletedOrders() throws Exception {
+        updateOrderTable(employeeVM.getOrders().stream()
+                .filter(order -> order.getOrderStatus().equals("completed"))
+                .collect(Collectors.toList()));
     }
+
+    public void showAllOrders() throws Exception {
+        updateOrderTable(employeeVM.getOrders());
+    }
+
+    private void updateOrderTable(List<Order> orders) {
+        ObservableList<Order> observableOrders = FXCollections.observableArrayList(orders);
+        orderTable.setItems(observableOrders);
+    }
+
+
 }

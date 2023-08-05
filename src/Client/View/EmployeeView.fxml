@@ -10,13 +10,15 @@
     <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Button onAction="#showNewOrders" prefHeight="25.0" prefWidth="105.0" text="NewOrder" />
         <Button onAction="#showCompletedOrders" text="CompletedOrder" />
+        <Button onAction="#showAllOrders" prefHeight="25.0" prefWidth="105.0" text="AllOrders" /> <!-- 新增的按钮 -->
+
     </VBox>
     <TableView fx:id="orderTable" layoutX="105.0" prefHeight="400.0" prefWidth="495.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columns>
-            <TableColumn fx:id="orderIdColumn" prefWidth="96.0" text="OrderId" />
-            <TableColumn fx:id="foodNameColumn" prefWidth="206.0" text="FoodName" />
-            <TableColumn fx:id="orderStatusColumn" prefWidth="104.0" text="OrderStatus" />
-            <TableColumn fx:id="orderActionColumn" prefWidth="88.0" text="Operate" />
+            <TableColumn fx:id="orderIdColumn" prefWidth="64.0" text="OrderId" />
+            <TableColumn fx:id="foodNameColumn" prefWidth="266.0" text="FoodName" />
+            <TableColumn fx:id="orderStatusColumn" prefWidth="91.0" text="OrderStatus" />
+            <TableColumn fx:id="orderActionColumn" prefWidth="73.0" text="Operate" />
         </columns>
     </TableView>
 </AnchorPane>
