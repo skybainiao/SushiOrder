@@ -132,7 +132,7 @@ public class HomepageController{
         homepageVM.addOrder(newOrder);
         System.out.println(newOrder);
         System.out.println("Order submitted");
-        // clear order data and order list
+
         orderMap.clear();
         totalCost = 0;
         orderList.getItems().clear();
