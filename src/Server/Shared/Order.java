@@ -1,6 +1,7 @@
 package Server.Shared;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ public class Order implements Serializable {
     private int totalPrice;
 
     private String orderStatus;
+    private LocalDateTime orderTime;
 
 
     public Order( Map<String, Integer> foodName, int totalPrice,String orderStatus) {
@@ -20,14 +22,25 @@ public class Order implements Serializable {
         this.foodName = foodName;
         this.totalPrice = totalPrice;
         this.orderStatus=orderStatus;
+        this.orderTime = LocalDateTime.now();
     }
     public Order(int orderId, Map<String, Integer> foodName, int totalPrice,String orderStatus) {
         this.orderId=orderId;
         this.foodName = foodName;
         this.totalPrice = totalPrice;
         this.orderStatus=orderStatus;
+        this.orderTime = LocalDateTime.now();
     }
 
+
+    // Getter and Setter
+    public LocalDateTime getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(LocalDateTime orderTime) {
+        this.orderTime = orderTime;
+    }
 
 
     public int getOrderId() {
@@ -69,6 +82,7 @@ public class Order implements Serializable {
                 ", foodName=" + foodName +
                 ", totalPrice=" + totalPrice +
                 ", orderStatus='" + orderStatus + '\'' +
+                ", orderTime=" + orderTime +
                 '}';
     }
 }

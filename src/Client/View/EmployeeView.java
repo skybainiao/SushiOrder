@@ -15,6 +15,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 import java.beans.PropertyChangeEvent;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +31,11 @@ public class EmployeeView {
     private TableColumn<Order, String> orderStatusColumn;
     @FXML
     private TableColumn<Order, Void> orderActionColumn;
+    @FXML
+    private TableColumn<Order, LocalDateTime> orderTimeColumn;
+    @FXML
+    private TableColumn<Order, Integer> totalPriceColumn;
+
     private EmployeeVM employeeVM;
     private ViewHandler viewHandler;
 
@@ -59,12 +66,20 @@ public class EmployeeView {
 
         orderIdColumn.setCellValueFactory(new PropertyValueFactory<Order, String>("orderId"));
         foodNameColumn.setCellValueFactory(new PropertyValueFactory<Order, String>("foodName"));
+        orderTimeColumn.setCellValueFactory(new PropertyValueFactory<Order, LocalDateTime>("orderTime"));
+        totalPriceColumn.setCellValueFactory(new PropertyValueFactory<Order, Integer>("totalPrice")); // 新增
         orderStatusColumn.setCellValueFactory(new PropertyValueFactory<Order, String>("orderStatus"));
+
+
 
         try {
 
             ObservableList<Order> orders = FXCollections.observableArrayList(employeeVM.getOrders());
+            for (Order order : orders) {
+                System.out.println("Order ID: " + order.getOrderId() + ", Time: " + order.getOrderTime());
+            }
             orderTable.setItems(orders);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
