@@ -1,8 +1,9 @@
 package Server.Database;
 
 import Server.Shared.Order;
-import Server.Shared.User;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Map;
 
 public class CustomerDatabaseOperations extends DatabaseOperationBase {
@@ -11,7 +12,11 @@ public class CustomerDatabaseOperations extends DatabaseOperationBase {
         super();
     }
 
-
+    @Override
+    public ResultSet executeQuery(String sql) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        return preparedStatement.executeQuery();
+    }
 
     public int addOrder(Order order) throws SQLException {
         String sql = "INSERT INTO sushi.orders (order_time, food_name, total_price, order_status) VALUES (CURRENT_TIMESTAMP, ?, ?, ?)";

@@ -2,8 +2,9 @@ package Server.Database;
 
 import Server.Shared.Order;
 import java.rmi.RemoteException;
-import java.sql.*;
-import java.util.Map;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class EmployeeDatabaseOperations extends DatabaseOperationBase {
 
@@ -11,11 +12,15 @@ public class EmployeeDatabaseOperations extends DatabaseOperationBase {
         super();
     }
 
+    @Override
+    public ResultSet executeQuery(String sql) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        return preparedStatement.executeQuery();
+    }
 
     public ResultSet getAllOrdersResultSet() throws SQLException {
         String sql = "SELECT * FROM sushi.orders";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        return preparedStatement.executeQuery();
+        return executeQuery(sql);
     }
 
     public int updateOrderStatus(int orderId, String newStatus) throws RemoteException {

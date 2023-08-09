@@ -2,6 +2,7 @@ package Server.Database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public abstract class DatabaseOperationBase {
@@ -16,6 +17,8 @@ public abstract class DatabaseOperationBase {
         connection = DriverManager.getConnection(url,user,password);
         System.out.println("Connected to database : "+connection.getCatalog());
     }
+
+    public abstract ResultSet executeQuery(String sql) throws SQLException;
 
 
 }
