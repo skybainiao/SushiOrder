@@ -13,8 +13,6 @@ import java.util.Map;
 
 public interface Server extends Remote,PCS {
     String test() throws RemoteException, SQLException;
-    void addUser(User user) throws RemoteException;
-    ArrayList<User> getUsers() throws Exception;
 
     void addOrder(Order order) throws RemoteException;
 

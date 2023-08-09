@@ -61,23 +61,6 @@ public class ViewHandler {
         mainStage.show();
     }
 
-    private Scene loginScene;
-    public void openLoginView(){
-        try {
-            FXMLLoader loader=new FXMLLoader();
-            loader.setLocation(getClass().getResource("LoginController.fxml"));
-            Parent root=loader.load();
-            LoginController loginController=loader.getController();
-            loginController.init(viewModelFactory.getLoginVM(),this);
-            mainStage.setTitle("Login");
-            loginScene=new Scene(root);
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-        mainStage.setScene(loginScene);
-        mainStage.show();
-    }
 
 
 

@@ -1,6 +1,8 @@
 package Server;
 
 import Client.Networking.Client;
+import Server.Database.CustomerDatabaseOperations;
+import Server.Database.EmployeeDatabaseOperations;
 import Server.Database.JDBC;
 
 import Server.Shared.Order;
@@ -24,9 +26,11 @@ public class ServerImpl implements Server{
     private PropertyChangeSupport support=new PropertyChangeSupport(this);
 
 
-    private JDBC jdbc;
+   // private JDBC jdbc;
     private List<Client> clients;
     private Map<Client, PropertyChangeListener> listeners = new HashMap<>();
+    private CustomerDatabaseOperations customerDatabaseOperations;
+    private EmployeeDatabaseOperations employeeDatabaseOperations;
 
 
     public ServerImpl() throws Exception {
@@ -37,50 +41,23 @@ public class ServerImpl implements Server{
         System.out.println("Server Start");
 
         clients=new ArrayList<>();
-        this.jdbc=new JDBC();
+        this.customerDatabaseOperations = new CustomerDatabaseOperations();
+        this.employeeDatabaseOperations = new EmployeeDatabaseOperations();
+        //this.jdbc=new JDBC();
 
 
-        //addUser(new User("chen","123321"));
-        System.out.println(getUsers().toString());
     }
 
    public String test(){
        return "server working";
    }
 
-    @Override
-    public void addUser(User user) throws RemoteException {
-        try {
-            jdbc.addUser(user);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public ArrayList<User> getUsers() throws Exception {
-        ResultSet rs = jdbc.getAllUsers();
-        ArrayList<User> userList =new ArrayList<>();
-
-        try{
-            while(rs.next()){
-                userList.add(new User(rs.getString("username"),rs.getString("password")));
-            }
-
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-
-        return userList;
-    }
 
     @Override
     public void addOrder(Order order) throws RemoteException {
         try {
-            jdbc.addOrder(order);
+            customerDatabaseOperations.addOrder(order);
             support.firePropertyChange("order",null,order);
 
         } catch (Exception e) {
@@ -115,7 +92,7 @@ public class ServerImpl implements Server{
     }
 
     public ArrayList<Order> getOrders() throws Exception {
-        ResultSet rs = jdbc.getAllOrdersResultSet();
+        ResultSet rs = employeeDatabaseOperations.getAllOrdersResultSet();
         ArrayList<Order> orderList = new ArrayList<>();
         try {
             while(rs.next()) {
@@ -130,7 +107,7 @@ public class ServerImpl implements Server{
 
     @Override
     public int updateOrderStatus(int orderId, String newStatus) throws RemoteException {
-        return jdbc.updateOrderStatus(orderId,newStatus);
+        return employeeDatabaseOperations.updateOrderStatus(orderId,newStatus);
     }
 
     public Map<String, Integer> convertStringToMap(String foodString) {

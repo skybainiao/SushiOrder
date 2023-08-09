@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface Client  extends Remote, PCS {
-    void addUser(User user) throws RemoteException;
-    ArrayList<User> getUsers() throws Exception;
+
     void setClientName(String name) throws RemoteException;
     String getClientName() throws RemoteException;
     void addOrder(Order order) throws RemoteException;

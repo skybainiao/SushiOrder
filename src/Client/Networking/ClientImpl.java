@@ -31,7 +31,6 @@ public class ClientImpl implements Client{
         Registry registry = LocateRegistry.getRegistry("localhost", 6666);
         server = (Server) registry.lookup("Server");
         support=new PropertyChangeSupport(this);
-        System.out.println(getUsers());
         server.addClientCallBack(this);
         server.addClient(this);
 
@@ -42,15 +41,6 @@ public class ClientImpl implements Client{
     }
 
 
-    @Override
-    public void addUser(User user) throws RemoteException {
-        server.addUser(user);
-    }
-
-    @Override
-    public ArrayList<User> getUsers() throws Exception {
-        return server.getUsers();
-    }
 
     @Override
     public void setClientName(String name) throws RemoteException {
